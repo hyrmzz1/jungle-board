@@ -46,4 +46,10 @@ public class BoardController {
         model.addAttribute("board", boardDTO);  // model에 데이터 넣어주고
         return "detail";    // detail.html에 출력
     }
+
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable Long id) {   // 경로상에 있는 값 받아오기 위해 @PathVariable 사용
+        boardService.delete(id);
+        return "redirect:/board/";
+    }
 }
