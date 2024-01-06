@@ -13,19 +13,29 @@ spring:
   thymeleaf:
     cache: false
 
-# spring data jpa 설정
-jpa:
-  database: mysql
-  database-platform: org.hibernate.dialect.MySQLDialect
-  show-sql: true
-  hibernate:
-    ddl-auto: update
-  properties:
+  jpa:
+    generate-ddl: true
     hibernate:
-      format_sql: true
+      ddl-auto: create
+      properties:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+    open-in-view: false
+    defer-datasource-initialization: true
 
 # spring data jpa 설정
-#  jpa:
+#jpa:
+#  database: mysql
+#  database-platform: org.hibernate.dialect.MySQLDialect
+#  show-sql: true
+#  hibernate:
+#    ddl-auto: update
+#  properties:
+#    hibernate:
+#      format_sql: true
+
+# spring data jpa 설정
+# jpa:
 #    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
 #    open-in-view: false
 #    show-sql: true
