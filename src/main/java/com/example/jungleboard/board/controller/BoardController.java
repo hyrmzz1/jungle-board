@@ -47,6 +47,20 @@ public class BoardController {
         return "detail";    // detail.html에 출력
     }
 
+    @GetMapping("/update/{id}")
+    public String updateForm(@PathVariable Long id, Model model) {
+        BoardDTO boardDTO = boardService.findById(id);
+        model.addAttribute("boardUpdate", boardDTO);  // BoardDTO 개체를 model에 추가
+        return "update";
+    }
+
+    @PostMapping("/update")
+    public String update(@ModelAttribute BoardDTO boardDTO, Model model) {  // 클라이언트 측에서 전송된 form data를 BoardDTO에 바인딩
+        BoardDTO board = boardService.update(boardDTO);
+        model.addAttribute("board", board); // 수정된 BoardDTO 개체가 속성명이 board인 model에 추가됨.
+        return "detail"; // 수정이 반영된 상세페이지 보기
+    }
+
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Long id) {   // 경로상에 있는 값 받아오기 위해 @PathVariable 사용
         boardService.delete(id);

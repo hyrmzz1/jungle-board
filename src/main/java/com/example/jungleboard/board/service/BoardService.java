@@ -49,6 +49,12 @@ public class BoardService {
         } else {return null;}
     }
 
+    public BoardDTO update(BoardDTO boardDTO) {
+        BoardEntity boardEntity = BoardEntity.toUpdateEntity(boardDTO);
+        boardRepository.save(boardEntity); // Entity에 id 값 전달되면 update로 처리
+        return findById((boardDTO.getId()));    // 게시글 상세 정보 컨트롤러 쪽으로 넘겨줌
+    }
+
     public void delete(Long id) {
         boardRepository.deleteById(id);
     }
