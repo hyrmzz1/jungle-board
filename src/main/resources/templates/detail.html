@@ -38,7 +38,8 @@
 <script th:inline="javascript"> // `th:inline="javascript"` 작성해줘야 `[[${board.id}]]`같은 값 꺼내서 활용 가능
     const listReq = () => {
         console.log("목록 요청");
-        location.href = "/board/";  // get 방식 요청
+        const page = [[${page}]];
+        location.href = "/board/paging?page=" + page;  // get 방식 요청, 해당 페이지 화면으로.
     }
 
     const updateReq = () => {

@@ -1,6 +1,9 @@
 package com.example.jungleboard.board.controller;
 
 //import ch.qos.logback.core.model.Model;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.ui.Model;
 import com.example.jungleboard.board.dto.BoardDTO;
 import com.example.jungleboard.board.repository.BoardRepository;
@@ -40,10 +43,12 @@ public class BoardController {
     }
 
     @GetMapping("/{id}")
-    public String findById(@PathVariable Long id, Model model) {    // 경로상에 있는 값 받아오기 위해 @PathVariable 사용
+    public String findById(@PathVariable Long id, Model model,  // 경로상에 있는 값 받아오기 위해 @PathVariable 사용
+                            @PageableDefault(page=1) Pageable pageable) {    // 페이지 요청 없는 경우
         boardService.updateHits(id);    // 해당 게시글의 조회수 하나 올리고
         BoardDTO boardDTO = boardService.findById(id);  // 게시글 데이터 가져와서
         model.addAttribute("board", boardDTO);  // model에 데이터 넣어주고
+        model.addAttribute("page", pageable.getPageNumber());   // pageNumber 담아서 화면에 출력하기 위함.
         return "detail";    // detail.html에 출력
     }
 
@@ -65,5 +70,23 @@ public class BoardController {
     public String delete(@PathVariable Long id) {   // 경로상에 있는 값 받아오기 위해 @PathVariable 사용
         boardService.delete(id);
         return "redirect:/board/";
+    }
+
+    @GetMapping("/paging")
+    // /board/paging?page=1 에서 page=1을 pageable이 가져옴.
+    public String paging(@PageableDefault(page = 1) Pageable pageable, Model model) {   // 페이지값 url에 없으면 1로 설정
+        Page<BoardDTO> boardList = boardService.paging(pageable);
+
+        // paging()에 int pageLimit = 3; 로 초기화된 상태
+        int blockLimit = 3;
+        int startPage = (((int)(Math.ceil((double)pageable.getPageNumber() / blockLimit))) - 1) * blockLimit + 1; // 1 4 7 10 ~~
+//        int endPage = ((startPage + blockLimit - 1) < boardList.getTotalPages()) ? startPage + blockLimit - 1 : boardList.getTotalPages();
+        int endPage = Math.min((startPage + blockLimit - 1), boardList.getTotalPages());    // 마지막 페이지가 blockLimit의 배수가 아닌 경우 고려
+
+        // 위의 세 변수(blockLimit, startPage, endPage) 가지고 paging.html으로
+        model.addAttribute("boardList", boardList);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+        return "paging";
     }
 }

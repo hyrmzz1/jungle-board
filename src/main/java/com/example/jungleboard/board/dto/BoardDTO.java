@@ -34,4 +34,12 @@ public class BoardDTO {
         boardDTO.setBoardUpdatedTime(boardEntity.getUpdatedTime());
         return boardDTO;
     }
+
+    public BoardDTO(Long id, String boardWriter, String boardTitle, int boardHits, LocalDateTime boardCreatedTime) {
+        this.id = id;
+        this.boardWriter = boardWriter;
+        this.boardTitle = boardTitle;
+        this.boardHits = boardHits;
+        this.boardCreatedTime = boardCreatedTime;
+    }
 }
