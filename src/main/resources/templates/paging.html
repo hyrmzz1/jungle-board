@@ -8,6 +8,10 @@
     <button onclick="saveReq()">글작성</button>
     <a href = "/board/join">회원가입</a>
     <a href = "/board/login">로그인</a>
+    <a href = "/board/logout">로그아웃</a>
+    <div>
+        <p th:text="${session.loginId}">님, 어서오세요</p>
+    </div>
 
     <table>
         <tr>

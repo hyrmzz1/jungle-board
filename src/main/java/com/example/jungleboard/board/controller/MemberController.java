@@ -41,4 +41,10 @@ public class MemberController {
             return "login"; // login.html로
         }
     }
+
+    @GetMapping("/board/logout")
+    public String lpgout(HttpSession session) {
+        session.invalidate();
+        return "paging";
+    }
 }
