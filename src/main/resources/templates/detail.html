@@ -3,11 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>detail</title>
+    <!-- jQuery cdn -->
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"
+            integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU="
+            crossorigin="anonymous"></script>
 </head>
 <body>
     <table>
         <tr>
-            <th>id</th>
+            <th>글 번호</th>
             <td th:text="${board.id}"></td>
         </tr>
         <tr>
@@ -34,6 +38,31 @@
     <button onclick="listReq()">목록</button>
     <button onclick="updateReq()">수정</button>
     <button onclick="deleteReq()">삭제</button>
+
+    <!-- 댓글 작성 박스 -->
+    <div id="comment-write">
+        <input type="text" id="commentWriter" placeholder="작성자">
+        <input type="text" id="commentContents" placeholder="내용">
+        <button id="comment-write-btn" onclick="commentWrite()">댓글작성</button>
+    </div>
+
+    <!-- 댓글 출력 -->
+    <div id="comment-list">
+        <table>
+            <tr>
+                <th>댓글번호</th>
+                <th>작성자</th>
+                <th>내용</th>
+                <th>작성시간</th>
+            </tr>
+            <tr th:each="comment: ${commentList}">
+                <td th:text="${comment.id}"></td>
+                <td th:text="${comment.commentWriter}"></td>
+                <td th:text="${comment.commentContents}"></td>
+                <td th:text="${#temporals.format(comment.commentCreatedTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+            </tr>
+        </table>
+    </div>
 </body>
 <script th:inline="javascript"> // `th:inline="javascript"` 작성해줘야 `[[${board.id}]]`같은 값 꺼내서 활용 가능
     const listReq = () => {
@@ -52,6 +81,51 @@
         console.log("삭제 요청");
         const id = [[${board.id}]];
         location.href = "/board/delete/" + id;
+    }
+
+    // 댓글 작성 버튼 누르면 호출됨
+    const commentWrite = () => {
+        const writer = document.getElementById("commentWriter").value;  // input#commentWriter의 내용 저장
+        const contents = document.getElementById("commentContents").value;  // value로 input 박스의 내용 가져옴
+        console.log("작성자: ", writer);
+        console.log("내용: ", contents);
+        const id = [[${board.id}]]; // 어느 글의 댓글인지 구분하기 위함. Update, Delete 때 사용했던 board.id
+        $.ajax({
+           type: "post",    // 요청 방식
+           url: "/comment/save",    // 요청 주소
+           data: {  // 요청 데이터
+               "commentWriter": writer,
+               "commentContents": contents,
+               "boardId": id
+           },
+           success: function (res) {    // 요청 성공하면 res(서버로부터 받은 응답) 처리
+               console.log("요청성공", res);
+
+               // 댓글 목록 화면에 출력
+               let output = "<table>";
+               output += "<tr><th>댓글번호</th>";
+               output += "<th>작성자</th>";
+               output += "<th>내용</th>";
+               output += "<th>작성시간</th></tr>";
+               for (let i in res) {
+                   output += "<tr>";
+                   output += "<td>" + res[i].id + "</td>";
+                   output += "<td>" + res[i].commentWriter + "</td>";
+                   output += "<td>" + res[i].commentContents + "</td>";
+                   output += "<td>" + res[i].commentCreatedTime + "</td>";
+                   output += "</tr>";
+               }
+               output += "</table>";
+               document.getElementById('comment-list').innerHTML = output;
+
+               // 작성 끝난 후 input value 초기화
+               document.getElementById('commentWriter').value = '';
+               document.getElementById('commentContents').value = '';
+           },
+           error: function (err) {  // ajax 요청에 오류 발생시 err에 오류 메세지 수신됨.
+               console.log("요청실패", err);
+           }
+        });
     }
 </script>
 </html>

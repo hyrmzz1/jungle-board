@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 // DB의 테이블 역할을 하는 클래스
 @Entity
 @Getter
@@ -29,6 +32,10 @@ public class BoardEntity extends BaseEntity {
 
     @Column
     private int boardHits;
+
+    // 부모가 삭제되면 자식도 함께 삭제 (게시글 삭제-> 댓글도 삭제)
+    @OneToMany(mappedBy = "boardEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<CommentEntity> commentEntityList = new ArrayList<>();
 
     public static BoardEntity toSaveEntity(BoardDTO boardDTO) {
         BoardEntity boardEntity = new BoardEntity();

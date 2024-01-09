@@ -1,6 +1,8 @@
 package com.example.jungleboard.board.controller;
 
 //import ch.qos.logback.core.model.Model;
+import com.example.jungleboard.board.dto.CommentDTO;
+import com.example.jungleboard.board.service.CommentService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -20,6 +22,7 @@ import java.util.List;
 @RequestMapping("/board")   // 대표 주소
 public class BoardController {
     private final BoardService boardService;    // 생성자 주입 방식으로 의존성 주입
+    private final CommentService commentService;
 
     @GetMapping("/save")    // 하위 주소 (입력된 url과 매핑값이 일치하는 메서드가 호출됨.)
     // get method로 받는 '/save'
@@ -47,7 +50,10 @@ public class BoardController {
                             @PageableDefault(page=1) Pageable pageable) {    // 페이지 요청 없는 경우
         boardService.updateHits(id);    // 해당 게시글의 조회수 하나 올리고
         BoardDTO boardDTO = boardService.findById(id);  // 게시글 데이터 가져와서
-        model.addAttribute("board", boardDTO);  // model에 데이터 넣어주고
+        /* 댓글 목록 가져오기 */
+        List<CommentDTO> commentDTOList = commentService.findAll(id);   // 게시글 id에 맞는 댓글 리스트 가져와서
+        model.addAttribute("commentList", commentDTOList);  // model에 넣어주기
+        model.addAttribute("board", boardDTO);  // model에 게시글 데이터 넣어주고
         model.addAttribute("page", pageable.getPageNumber());   // pageNumber 담아서 화면에 출력하기 위함.
         return "detail";    // detail.html에 출력
     }
