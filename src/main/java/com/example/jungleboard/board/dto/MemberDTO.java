@@ -1,5 +1,6 @@
 package com.example.jungleboard.board.dto;
 
+import com.example.jungleboard.board.entity.MemberEntity;
 import lombok.*;
 
 @Getter
@@ -11,4 +12,13 @@ public class MemberDTO {
     private Long code;  // 멤버 고유 코드 (pk)
     private String memberId;
     private String memberPassword;
+
+    // entity -> DTO 변환
+    public static MemberDTO toMemberDTO(MemberEntity memberEntity) {
+        MemberDTO memberDTO = new MemberDTO();
+        memberDTO.setCode(memberEntity.getCode());
+        memberDTO.setMemberId(memberEntity.getMemberId());
+        memberDTO.setMemberPassword(memberEntity.getMemberPassword());
+        return memberDTO;
+    }
 }
