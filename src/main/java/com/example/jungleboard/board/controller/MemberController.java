@@ -3,7 +3,6 @@ package com.example.jungleboard.board.controller;
 import com.example.jungleboard.board.dto.MemberDTO;
 import com.example.jungleboard.board.service.MemberService;
 import jakarta.servlet.http.HttpSession;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,17 +33,18 @@ public class MemberController {
     @PostMapping("/board/login")
     public String login(@ModelAttribute MemberDTO memberDTO, HttpSession session) {
         MemberDTO loginResult = memberService.login(memberDTO);
+        System.out.println("memberDTO = " + memberDTO + ", session = " + session);
         if (loginResult != null) {  // 로그인 성공
             session.setAttribute("loginId", loginResult.getMemberId());
-            return "paging";    // paging.html로
+            return "index";    // paging.html로
         } else {    // 로그인 실패
             return "login"; // login.html로
         }
     }
 
     @GetMapping("/board/logout")
-    public String lpgout(HttpSession session) {
+    public String logout(HttpSession session) {
         session.invalidate();
-        return "paging";
+        return "login";
     }
 }

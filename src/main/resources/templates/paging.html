@@ -10,7 +10,8 @@
     <a href = "/board/login">로그인</a>
     <a href = "/board/logout">로그아웃</a>
     <div>
-        <p th:text="${session.loginId}">님, 어서오세요</p>
+        <p th:if="${session.loginId != null}" th:text="${session.loginId + '님, 어서오세요'}"></p>
+        <p th:unless="${session.loginId != null}">로그인 상태가 아닙니다.</p>
     </div>
 
     <table>
