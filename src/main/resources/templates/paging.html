@@ -5,13 +5,15 @@
     <title>Title</title>
 </head>
 <body>
-    <button onclick="saveReq()">글작성</button>
-    <a href = "/board/join">회원가입</a>
-    <a href = "/board/login">로그인</a>
-    <a href = "/board/logout">로그아웃</a>
+    <button onclick="saveReq()" th:if="${session.loginId != null}">Write</button>
+    <a href="/board/logout" th:if="${session.loginId != null}">Logout</a>
+
+    <a href="/board/join" th:unless="${session.loginId != null}">Sign up</a>
+    <a href="/board/login" th:unless="${session.loginId != null}">Login</a>
+
     <div>
-        <p th:if="${session.loginId != null}" th:text="${session.loginId + '님, 어서오세요'}"></p>
-        <p th:unless="${session.loginId != null}">로그인 상태가 아닙니다.</p>
+        <p th:if="${session.loginId != null}" th:text="${session.loginId + '님, 어서오세요.'}"></p>
+        <p th:unless="${session.loginId != null}">로그인을 하면 글을 작성할 수 있습니다.</p>
     </div>
 
     <table>

@@ -5,23 +5,23 @@
     <title>index</title>
 </head>
 <body>
-    <button onclick="saveReq()">글작성</button>
-    <a href="/board/save">글작성(링크)</a>
-    <button onclick="listReq()">글목록</button>
-    <button onclick="pagingReq()">페이징목록</button>
+<!--    <button onclick="saveReq()">글작성</button>-->
+<!--    <a href="/board/save">글작성(링크)</a>-->
+<!--    <button onclick="listReq()">글목록</button>-->
+    <button onclick="pagingReq()">Go to BOARD</button>
 </body>
 <script>
-    // saveReq() 호출되면 현재 페이지의 URL을 location.href로 리다이렉션
-    const saveReq = () => { // 변수 saveReq에 화살표 함수 할당
-        location.href = "/board/save";  // 새 페이지로 리다이렉션
-    }
+<!--    // saveReq() 호출되면 현재 페이지의 URL을 location.href로 리다이렉션-->
+<!--    const saveReq = () => { // 변수 saveReq에 화살표 함수 할당-->
+<!--        location.href = "/board/save";  // 새 페이지로 리다이렉션-->
+<!--    }-->
 
-    // 아래 표기법과 같은 의미
-    // function saveReq() {}
+<!--    // 아래 표기법과 같은 의미-->
+<!--    // function saveReq() {}-->
 
-    const listReq = () => {
-        location.href = "/board/";
-    }
+<!--    const listReq = () => {-->
+<!--        location.href = "/board/";-->
+<!--    }-->
 
     const pagingReq = () => {
         location.href = "/board/paging";
